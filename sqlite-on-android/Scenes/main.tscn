@@ -1,0 +1,66 @@
+[gd_scene load_steps=2 format=3 uid="uid://d0t2yorsg1xhb"]
+
+[ext_resource type="Script" uid="uid://b63cj1lrpxs4l" path="res://Source/Main.cs" id="1_jjgbg"]
+
+[node name="Main" type="ColorRect"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.266575, 0.266575, 0.266575, 1)
+script = ExtResource("1_jjgbg")
+
+[node name="HBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -157.5
+offset_top = -46.0
+offset_right = 157.5
+offset_bottom = 46.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GetButton" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "GET Row 1"
+
+[node name="UpdateButton" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "UPDATE Row 1
+"
+
+[node name="InsertButton" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "INSERT New Row"
+
+[node name="NameLineEdit" type="LineEdit" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+
+[node name="NoteLineEdit" type="LineEdit" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+
+[node name="ClearButton" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Clear Inputs"
+
+[node name="QueryButton" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Query to Console"
+
+[connection signal="pressed" from="HBoxContainer/GetButton" to="." method="OnGetButtonPress"]
+[connection signal="pressed" from="HBoxContainer/UpdateButton" to="." method="OnUpdateButtonPress"]
+[connection signal="pressed" from="HBoxContainer/InsertButton" to="." method="OnInsertButtonPress"]
+[connection signal="pressed" from="HBoxContainer/ClearButton" to="." method="OnClearButtonPress"]
+[connection signal="pressed" from="HBoxContainer/QueryButton" to="." method="OnQueryButtonPress"]
