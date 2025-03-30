@@ -44,10 +44,12 @@ text = "INSERT New Row"
 [node name="NameLineEdit" type="LineEdit" parent="HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 50
+placeholder_text = "name"
 
 [node name="NoteLineEdit" type="LineEdit" parent="HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 50
+placeholder_text = "note"
 
 [node name="ClearButton" type="Button" parent="HBoxContainer"]
 layout_mode = 2
