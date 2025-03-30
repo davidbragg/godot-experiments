@@ -6,9 +6,9 @@ public partial class Main : ColorRect
 	private static readonly string DbDir = "user://Data";
 	private static readonly string DbFile = $"{DbDir}/test.db";
 
+	private string _dbPath;
 	private LineEdit _nameLine;
 	private LineEdit _noteLine;
-	private string _dbPath;
 
 	public class Person
 	{
@@ -40,7 +40,7 @@ public partial class Main : ColorRect
 		}
 
 		// get the absolute file path for LiteDB to use
-		// occurs after file exists confirmed, otherwise FileAccess throws a null reference
+		// occurs after file exists confirmed, otherwise FileAccess throws a null reference exception
 		_dbPath = FileAccess.Open(DbFile, FileAccess.ModeFlags.Read).GetPathAbsolute();
 
 		if (createTable)
