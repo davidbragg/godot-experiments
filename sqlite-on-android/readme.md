@@ -59,7 +59,7 @@ I kept it expecting it to do that. Then got annoyed when it wasn't there in the 
 
 #### Absolute DB File Path for SQLite
 
-The next hurdle was ensuring that SQLite had something to work with. To the best of my knowledge, external libraroes won't have any understanding of Godot's `res://` and `user://` resources, that meant doing a little bit of work to ensure I that the resources existed and SQLite had an absolute path to work with.
+The next hurdle was ensuring that SQLite had something to work with. To the best of my knowledge, external libraries won't have any understanding of Godot's `res://` and `user://` resources, that meant doing a little bit of work to ensure I that the resources existed and SQLite had an absolute path to work with.
 
 This was solved in the `_Ready()` method and didn't really change much as the project progressed.
 

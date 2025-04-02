@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=3 uid="uid://bj1jcppy13a0l"]
+
+[ext_resource type="Script" uid="uid://cyjuyenlkedko" path="res://src/draggable_color_rect.gd" id="1_xcxkf"]
+
+[node name="DraggableColorRect" type="ColorRect"]
+offset_right = 134.0
+offset_bottom = 40.0
+color = Color(0.129558, 0.129558, 0.129558, 1)
+script = ExtResource("1_xcxkf")
+max_offset = Vector2(40, 40)
+trigger_threshold = 35
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.5
+offset_top = -11.5
+offset_right = 32.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+text = "Drag Me"
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]
