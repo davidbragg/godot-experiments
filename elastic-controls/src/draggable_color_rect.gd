@@ -10,6 +10,7 @@ enum Action { IDLE, DRAG, RELEASED }
 @export var trigger_threshold: int = 90
 @export var constrain_axis_direction: ConstraintAxis = ConstraintAxis.X
 @export var release_tween_length: float = 0.3
+@export var label_text: String = "Drag Me"
 
 # set to (inf, inf) to act as a null/unset state
 var node_start_position: Vector2
@@ -28,6 +29,7 @@ func _ready() -> void:
 		assert(max_offset.y >= trigger_threshold, "Trigger Threshold > Max Offset y. Trigger is unreachable.")
 
 	node_start_position = position
+	$Label.text = label_text
 
 	if OS.is_debug_build():
 		debug_info()
