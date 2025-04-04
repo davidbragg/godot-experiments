@@ -12,15 +12,15 @@ enum Action { IDLE, DRAG, RELEASED }
 @export var release_tween_length: float = 0.3
 @export var label_text: String = "Drag Me"
 
-# set to (inf, inf) to act as a null/unset state
-var node_start_position: Vector2
 var trigger_state: Trigger = Trigger.NONE
 var action_state: Action = Action.IDLE
-var tween = Tween.new()
+var tween: Tween = Tween.new()
 var last_emit: String = "last emit: NONE"
 
-# assert valid export variables on ready
+var node_start_position: Vector2
+
 func _ready() -> void:
+	# assert valid export variables on ready
 	assert(trigger_threshold > 0, "Trigger Threshold must be greater than 0.")
 
 	if (constrain_axis_direction == ConstraintAxis.X):
@@ -37,7 +37,7 @@ func _ready() -> void:
 
 func _on_gui_input(event: InputEvent) -> void:
 	# on left click release when Action.DRAG
-	if (event is InputEventMouseButton && event.pressed == false && action_state == Action.DRAG):
+	if (event is InputEventMouseButton && event.button_index == 1 && event.pressed == false && action_state == Action.DRAG):
 		emit_trigger()
 		set_action(Action.RELEASED)
 		reset_position()
@@ -55,7 +55,7 @@ func drag_node(event: InputEvent) -> void:
 
 	if constrain_axis_direction == ConstraintAxis.X:
 		new_position.y = node_start_position.y
-	if constrain_axis_direction == ConstraintAxis.Y:
+	else:
 		new_position.x = node_start_position.x
 
 	var position_offset = node_start_position - new_position
@@ -94,8 +94,11 @@ func emit_trigger() -> void:
 	# draggable_node.emit(Trigger.STATE)
 
 func reset_position() -> void:
-	# it is normal to put an if tween: tween.kill() here to prevent repeatedly creating tweens
-	# we should never get here during an active tween due to tracking on action_state
+	# it is normal to put an
+	# if tween:
+	#	tween.kill()
+	# here to prevent repeatedly creating tweens
+	# omitted as we should never get here during an active tween due to tracking on action_state
 	tween = create_tween()
 	# tweens run sequentially
 	# return the node back to the node_start_position

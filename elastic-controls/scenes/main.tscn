@@ -10,26 +10,36 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="DraggableColorRect2" parent="." instance=ExtResource("1_o5qli")]
-layout_mode = 0
-offset_left = 177.0
-offset_top = 57.0
-offset_right = 311.0
-offset_bottom = 97.0
+[node name="DragY" parent="." instance=ExtResource("1_o5qli")]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -150.0
+offset_top = 273.0
+offset_right = -16.0
+offset_bottom = 313.0
+grow_horizontal = 2
+scale = Vector2(2, 2)
+max_offset = Vector2(80, 80)
+trigger_threshold = 70
 constrain_axis_direction = 1
 label_text = "Drag Y"
 
-[node name="DraggableColorRect" parent="." instance=ExtResource("1_o5qli")]
+[node name="DragX" parent="." instance=ExtResource("1_o5qli")]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -67.0
+offset_left = -150.0
 offset_top = -20.0
-offset_right = 67.0
+offset_right = -16.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(2, 2)
+max_offset = Vector2(80, 80)
+trigger_threshold = 70
 label_text = "Drag X"
