@@ -28,7 +28,7 @@ func _ready() -> void:
 		assert(max_offset.y >= trigger_threshold, "Trigger Threshold > Max Offset y. Trigger is unreachable.")
 
 	node_start_position = position
-	
+
 	if OS.is_debug_build():
 		debug_info()
 		$DebugInfo.visible = true
@@ -105,6 +105,6 @@ func reset_position() -> void:
 func debug_info() -> void:
 	if !OS.is_debug_build():
 		return
-	var trigger_zone = "trigger zone: " + Trigger.keys()[trigger_state]
-	var action_state ="action state: " + Action.keys()[action_state]
-	$DebugInfo.text = trigger_zone + "\n" + action_state + "\n" + last_emit
+	var trigger_info = "trigger zone: " + Trigger.keys()[trigger_state]
+	var active_info ="action state: " + Action.keys()[action_state]
+	$DebugInfo.text = trigger_info + "\n" + active_info + "\n" + last_emit
