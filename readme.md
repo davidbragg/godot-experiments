@@ -1,4 +1,4 @@
-# Godot Experiments
+# Game Dev & Godot Experiments
 
 ## Projects
 
@@ -22,6 +22,6 @@ Written against Godot 4.4.1 using GDScript. Creates a basic scene that could be 
 
 Found in the polyglot-notebooks folder, these are notebooks that are a combination of markdown and C# that allow running snippets of C# code in vs code. I use these to explore technical concepts or to solve implementation problems without the burden of full projects.
 
-### 2048_exploration.dib
+### 2048_exploration
 
-This is an exploration of how to manage a game of 2048 in C# code independently. My goal was to attempt to break down the game logic into functional pieces without looking up prior implementations.
+This is an exploration of how to manage a game of 2048 in C# code independently. My goal was to attempt to break down the game logic into functional pieces without looking up prior implementations. It is an attempt to encapsulate the game state and game manager in a single class.

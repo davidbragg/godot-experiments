@@ -8,6 +8,8 @@ Noodling around the idea of how to reproduce 2048 in C# as a possible road to re
 
 ![Hues Screenshot](images/hues.png)
 
+The following are my live notes and code tests as I was working through this. The full `GameBoard` class is in [2048_GameBoard_source.cs](2048_GameBoard_source.cs).
+
 I think there are functionally just a few pieces of logic that need to be handled. The first being just setting up the game board. I think the easiest way to manage this is just a jagged int array.
 
 #!csharp
@@ -528,7 +530,7 @@ public bool PlayableMoveExists(int[,] testBoard)
 
 #!markdown
 
-From a game board management, the only thing left to tackle is actual movement. 
+Game play movement. 
 
 * swipe direction
 * check adjacent tile in swipe direction
@@ -559,6 +561,483 @@ If the player swipes left, the two left columns take precendence. Then columns t
 * player swipes right, columns four & three, three & two, two & one
 * player swipes up, rows four & three, three & two, two & one 
 
-The additional rule here is that on any merge the final tile space will always be a `0`. 
+The additional rule here is that on any merge the final tile space will always be a `0`.
+
+Final piece to implement is movement & merging of tiles. Once that's done I should be able to encapsulate everything into a single class that is technically playable within the polyglot notebook space.
 
 I'm sure there's a clever way to do this, but I think I'm going to need to start from the bad, long version and work my way backward from there to a better version.
+
+#!csharp
+
+var testBoard = new int[,] { { 2, 2, 0, 0}, { 2, 4, 8, 8}, { 0, 4, 8, 0}, { 2, 2, 8, 0} };
+
+PrintBoard(testBoard);
+MoveLeft(testBoard);
+PrintBoard(testBoard);
+MoveRight(testBoard);
+PrintBoard(testBoard);
+MoveUp(testBoard);
+PrintBoard(testBoard);
+MoveDown(testBoard);
+PrintBoard(testBoard);
+MoveDown(testBoard);
+PrintBoard(testBoard);
+
+public int[,] MoveLeft(int[,] board)
+{
+	for (int i = 0; i < 4; i++)
+		for (int j = 0; j < 3; j++)
+		{
+			if (board[i,j] == board[i,j+1] || board[i,j] == 0)
+			{
+				board[i,j] += board[i,j+1];
+				board[i,j+1] = 0;
+			}
+		}
+
+	return board;
+}
+
+public int[,] MoveRight(int[,] board)
+{
+	for (int i = 0; i < 4; i++)
+		for (int j = 3; j > 0; j--)
+		{
+			if (board[i,j] == board[i,j-1] || board[i,j] == 0)
+			{
+				board[i,j] += board[i,j-1];
+				board[i,j-1] = 0;
+			}
+		}
+
+	return board;
+}
+
+public int[,] MoveUp(int[,] board)
+{
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			if ((board[i,j] == 0) || board[i,j] == board[i+1,j])
+			{
+				board[i,j] += board[i+1,j];
+				board[i+1,j] = 0;
+			}
+		}
+	}
+
+	return board;
+}
+
+public int[,] MoveDown(int[,] board)
+{
+	for (int i = 3; i > 0; i--)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			if ((board[i,j] == 0) || board[i,j] == board[i-1,j])
+			{
+				board[i,j] += board[i-1,j];
+				board[i-1,j] = 0;
+			}
+		}
+	}
+
+	return board;
+}
+
+public void PrintBoard(int[,] testBoard)
+{
+		string board = "";
+
+		for (int i = 0; i < 4; i++)
+		{
+			board += "-----------------------------\n";
+			for (int j = 0; j < 4; j++)
+			{
+				var tileNumber = testBoard[i,j].ToString();
+				board += $"| {tileNumber.PadLeft(4, ' ')} ";
+			}
+			board += "|\n";
+		}
+		board += "-----------------------------\n";
+
+		Console.WriteLine(board);
+}
+
+#!markdown
+
+Well, that is definitely ugly. But it works. I'm able to move items around and they're merging appropriately. I have all the necessary functionality to make a CLI based 2048. 
+
+Cram all of this into a class and see what else I really need.
+
+#!csharp
+
+class GameBoard
+{
+	public int[,] testBoard = new int[,] { { 0, 0, 0, 0}, { 0, 0, 0, 0}, { 0, 0, 0, 0}, { 0, 0, 0, 0} };
+
+	public override string ToString() {
+		string board = "";
+
+		for (int i = 0; i < 4; i++)
+		{
+			board += "-----------------\n";
+			for (int j = 0; j < 4; j++)
+			{
+				board += $"| {testBoard[i,j]} ";
+			}
+			board += "|\n";
+		}
+		board += "-----------------\n";
+
+		return board;
+	}
+
+	public List<(int, int)> GetOpenTiles()
+	{
+		List<(int, int)> openTiles = [];
+
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				if (testBoard[i,j] == 0)
+				{
+					openTiles.Add((i, j));
+				}
+			}
+		}
+
+		return openTiles;
+	}
+
+	public void SetOpenTile()
+	{
+		var openTiles = GetOpenTiles();
+		var r = new Random();
+		var tile = openTiles[r.Next(0, openTiles.Count())];
+		testBoard[tile.Item1, tile.Item2] = (int)r.Next(1, 3) * 2;
+	}
+
+	public void UglyUpThePlace()
+	{
+		var r = new Random();
+
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				testBoard[i,j] = r.Next(0,3) * 2;
+			}
+		}
+	}
+
+	public void MoveLeft()
+	{
+		for (int i = 0; i < 4; i++)
+			for (int j = 0; j < 3; j++)
+			{
+				if (testBoard[i,j] == testBoard[i,j+1] || testBoard[i,j] == 0)
+				{
+					testBoard[i,j] += testBoard[i,j+1];
+					testBoard[i,j+1] = 0;
+				}
+			}
+	}
+
+	public void MoveRight()
+	{
+		for (int i = 0; i < 4; i++)
+			for (int j = 3; j > 0; j--)
+			{
+				if (testBoard[i,j] == testBoard[i,j-1] || testBoard[i,j] == 0)
+				{
+					testBoard[i,j] += testBoard[i,j-1];
+					testBoard[i,j-1] = 0;
+				}
+			}
+	}
+
+	public void MoveUp()
+	{
+		for (int i = 0; i < 3; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				if ((testBoard[i,j] == 0) || testBoard[i,j] == testBoard[i+1,j])
+				{
+					testBoard[i,j] += testBoard[i+1,j];
+					testBoard[i+1,j] = 0;
+				}
+			}
+		}
+	}
+
+	public void MoveDown()
+	{
+		for (int i = 3; i > 0; i--)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				if ((testBoard[i,j] == 0) || testBoard[i,j] == testBoard[i-1,j])
+				{
+					testBoard[i,j] += testBoard[i-1,j];
+					testBoard[i-1,j] = 0;
+				}
+			}
+		}
+	}
+
+	public bool OpenTileExists() => testBoard.Cast<int>().Any(o => o == 0);
+
+	public bool PlayableMoveExists(int[,] testBoard)
+	{
+		for (int i = 0; i < 3; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				if ((testBoard[i,j] != 0 && testBoard[i,j] == testBoard[i+1,j]) ||
+					(testBoard[j,i] != 0 && testBoard[j,i] == testBoard[j,i+1]))
+				{
+					return true;
+				}
+			}
+
+		}
+		return false;
+	}
+}
+
+#!csharp
+
+var gb = new GameBoard();
+gb.UglyUpThePlace();
+Px();
+gb.MoveLeft();
+gb.SetOpenTile();
+Px();
+gb.MoveLeft();
+gb.SetOpenTile();
+Px();
+
+public void Px()
+{
+	Console.WriteLine(gb.ToString());
+}
+
+#!markdown
+
+I'm missing a game loop at this point. I can't do input in a polyglot notebook. So, to test this I would need to actually create a proper app.
+
+Nope. I'm missing whether a move was valid or not. If nothing changes position then no move should be taken and no new tile should be spawned.
+
+#!csharp
+
+class GameBoard
+{
+	public int[,] testBoard = new int[,] { { 0, 0, 0, 0}, { 0, 0, 0, 0}, { 0, 0, 0, 0}, { 0, 0, 0, 0} };
+
+	public void RunGame()
+	{
+		SetOpenTile();
+		SetOpenTile();
+		Console.Clear();
+		Console.WriteLine(ToString());
+		var gameLoop = true;
+		while (gameLoop)
+		{
+
+			Console.Write("move: ");
+			var direction = Console.ReadLine();
+			var spawnNewTile = false;
+
+			switch(direction)
+			{
+				case "l":
+					spawnNewTile = MoveLeft();
+					break;
+				case "r":
+					spawnNewTile = MoveRight();
+					break;
+				case "d":
+					spawnNewTile = MoveDown();
+					break;
+				case "u":
+					spawnNewTile = MoveUp();
+					break;
+				case "x":
+					gameLoop = false;
+					return;
+			}
+
+			if (spawnNewTile) SetOpenTile();
+			Console.Clear();
+			Console.WriteLine(ToString());
+			gameLoop = OpenTileExists() || PlayableMoveExists();
+		}
+		Console.WriteLine("Game Over");
+	}
+
+	public override string ToString() {
+		string board = "";
+
+		for (int i = 0; i < 4; i++)
+		{
+			board += "-------------------------\n";
+			for (int j = 0; j < 4; j++)
+			{
+				var tileValue = testBoard[i,j].ToString().PadLeft(4, ' ');
+				board += $"|{tileValue} ";
+			}
+			board += "|\n";
+		}
+		board += "-------------------------\n";
+
+		return board;
+	}
+
+	public List<(int, int)> GetOpenTiles()
+	{
+		List<(int, int)> openTiles = [];
+
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				if (testBoard[i,j] == 0)
+				{
+					openTiles.Add((i, j));
+				}
+			}
+		}
+
+		return openTiles;
+	}
+
+	public void SetOpenTile()
+	{
+		var openTiles = GetOpenTiles();
+		var r = new Random();
+		var tile = openTiles[r.Next(0, openTiles.Count())];
+		testBoard[tile.Item1, tile.Item2] = (int)r.Next(1, 3) * 2;
+	}
+
+	public void UglyUpThePlace()
+	{
+		var r = new Random();
+
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				testBoard[i,j] = r.Next(0,3) * 2;
+			}
+		}
+	}
+
+	public bool MoveLeft()
+	{
+		var moveCompleted = false;
+		for (int i = 0; i < 4; i++)
+			for (int j = 0; j < 3; j++)
+			{
+				if (
+					(testBoard[i,j] != 0 && testBoard[i,j] == testBoard[i,j+1]) ||
+					(testBoard[i,j] == 0 && testBoard[i,j+1] != 0))
+				{
+					testBoard[i,j] += testBoard[i,j+1];
+					testBoard[i,j+1] = 0;
+					moveCompleted = true;
+				}
+			}
+		return moveCompleted;
+	}
+
+	public bool MoveRight()
+	{
+		var moveCompleted = false;
+		for (int i = 0; i < 4; i++)
+			for (int j = 3; j > 0; j--)
+			{
+				if (
+					(testBoard[i,j] != 0 && testBoard[i,j] == testBoard[i,j-1]) ||
+					(testBoard[i,j] == 0 && testBoard[i,j-1] != 0))
+				{
+					testBoard[i,j] += testBoard[i,j-1];
+					testBoard[i,j-1] = 0;
+					moveCompleted = true;
+				}
+			}
+		return moveCompleted;
+	}
+
+
+	public bool MoveUp()
+	{
+		var moveCompleted = false;
+		for (int i = 0; i < 3; i++)
+			for (int j = 0; j < 4; j++)
+			{
+				if (
+					(testBoard[i,j] == 0 && testBoard[i+1,j] != 0) ||
+					(testBoard[i,j] != 0 && testBoard[i,j] == testBoard[i+1,j]))
+				{
+					testBoard[i,j] += testBoard[i+1,j];
+					testBoard[i+1,j] = 0;
+					moveCompleted = true;
+				}
+			}
+		return moveCompleted;
+	}
+
+	public bool MoveDown()
+	{
+		var moveCompleted = false;
+		for (int i = 3; i > 0; i--)
+			for (int j = 0; j < 4; j++)
+			{
+				if (
+					(testBoard[i,j] == 0 && testBoard[i-1,j] != 0) ||
+					(testBoard[i,j] != 0 && testBoard[i,j] == testBoard[i-1,j]))
+				{
+					testBoard[i,j] += testBoard[i-1,j];
+					testBoard[i-1,j] = 0;
+					moveCompleted = true;
+				}
+			}
+		return moveCompleted;
+	}
+
+	public bool OpenTileExists() => testBoard.Cast<int>().Any(o => o == 0);
+
+	public bool PlayableMoveExists()
+	{
+		for (int i = 0; i < 3; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				if ((testBoard[i,j] != 0 && testBoard[i,j] == testBoard[i+1,j]) ||
+					(testBoard[j,i] != 0 && testBoard[j,i] == testBoard[j,i+1]))
+				{
+					return true;
+				}
+			}
+
+		}
+		return false;
+	}
+}
+
+#!markdown
+
+That is the full game encapsulated within the class. All that needs to be done to run this is: `new GameBoard().RunGame();` 
+
+![](images/screenshot.png)
+
+Again, that won't work in the polyglot notebook, as it can't take input. A new C# console project with that line at the top and the class underneath it in `Program.cs` is enough to make it work.
+
+All of that said, this is absolutely not a good way to do this. It's also not the _Godot way_ to do this. Even if I wanted to use this code I'd have to add additional functionality in here to communicate state back to tile nodes that would be impractical when I could do this a couple different ways in Godot directly.
+
+It was a good exercise to walk through. I'm happy I was able to put some thought into the game rules and their implementation. If I make a 2048/Hues style game in Godot I don't see this code surviving that process, but the experience will follow through.
