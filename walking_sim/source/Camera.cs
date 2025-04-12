@@ -11,6 +11,12 @@ public partial class Camera : CharacterBody3D
 	public float RotMult { get; set; } = 2.0f;
 
 	private Vector3 _targetVelocity = Vector3.Zero;
+	private Node3D _pov;
+
+	public override void _Ready()
+	{
+		_pov = GetNode<Node3D>("POV");
+	}
 
 	public override void _PhysicsProcess(double delta)
 	{
@@ -28,12 +34,12 @@ public partial class Camera : CharacterBody3D
 		float look = Input.GetAxis("look_down", "look_up");
 
 		// rotate the camera & light on the X axis, independently of the player
-		GetNode<Node3D>("POV").RotateX(RotMult * look * (float)delta);
+		_pov.RotateX(RotMult * look * (float)delta);
 		float lookClamp = Mathf.Pi / 2.6f;
-		float x = Mathf.Clamp(GetNode<Node3D>("POV").Rotation.X, -lookClamp, lookClamp);
-		float y = GetNode<Node3D>("POV").Rotation.Y;
-		float z = GetNode<Node3D>("POV").Rotation.Z;
-		GetNode<Node3D>("POV").Rotation = new Vector3(x, y, z);
+		float x = Mathf.Clamp(_pov.Rotation.X, -lookClamp, lookClamp);
+		float y = _pov.Rotation.Y;
+		float z = _pov.Rotation.Z;
+		_pov.Rotation = new Vector3(x, y, z);
 
 		// rotate the player on the Y axis & move along the rotated X & Z
 		RotateY(RotMult * turn * (float)delta);
