@@ -1,0 +1,28 @@
+[gd_scene load_steps=2 format=3 uid="uid://c6m3gx7a44ed3"]
+
+[ext_resource type="Script" uid="uid://dvbj2v2t65glu" path="res://source/Camera.cs" id="1_cvpoc"]
+
+[node name="PlayerCharacter" type="CharacterBody3D"]
+script = ExtResource("1_cvpoc")
+
+[node name="CollisionPolygon3D" type="CollisionPolygon3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.016, -0.58)
+depth = 2.0
+polygon = PackedVector2Array(-1.27785, 1.17136, 1.278, 1.171, 1.278, -3.154, -1.278, -3.154)
+
+[node name="POV" type="Node3D" parent="."]
+
+[node name="Flashlight" type="SpotLight3D" parent="POV"]
+transform = Transform3D(1, 0, 0, 0, 0.991356, 0.131201, 0, -0.131201, 0.991356, 0, 0, 0)
+light_color = Color(1, 0.888401, 0.760106, 1)
+light_energy = 16.0
+light_volumetric_fog_energy = 2.616
+shadow_enabled = true
+distance_fade_enabled = true
+spot_range = 26.826
+spot_attenuation = 2.53
+spot_angle = 32.6295
+spot_angle_attenuation = 0.535887
+
+[node name="Camera3D" type="Camera3D" parent="POV"]
+current = true

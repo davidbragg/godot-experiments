@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://sihf8et5gow5"]
+
+[ext_resource type="Texture2D" uid="uid://cui75h3xp64ft" path="res://images/UV_Checker_Map_2K.png" id="1_47jl6"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sugp2"]
+albedo_texture = ExtResource("1_47jl6")
+uv1_scale = Vector3(-1, 1, 1)
+
+[node name="StaticBody3D" type="StaticBody3D"]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(9.81591, 0, 0, 0, 1.00729, 0, 0, 0, 18.5468, 0.277476, -0.0723267, 0.0543612)
+material_override = SubResource("StandardMaterial3D_sugp2")
+size = Vector3(1.56848, 0.180786, 0.853149)
+
+[node name="CollisionPolygon3D" type="CollisionPolygon3D" parent="."]
+depth = 15.755
+polygon = PackedVector2Array(-7.51, -0.156, 8.035, -0.156, 8.035, -0.156, -7.51, -0.156)

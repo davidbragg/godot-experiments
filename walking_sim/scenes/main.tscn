@@ -1,0 +1,52 @@
+[gd_scene load_steps=4 format=3 uid="uid://dohri77avrws0"]
+
+[ext_resource type="PackedScene" uid="uid://sihf8et5gow5" path="res://scenes/dummy_platform.tscn" id="1_0wfyh"]
+[ext_resource type="PackedScene" uid="uid://c6m3gx7a44ed3" path="res://scenes/camera.tscn" id="2_0wfyh"]
+[ext_resource type="PackedScene" uid="uid://daaj7dkcgs36n" path="res://scenes/pillar.tscn" id="3_sugp2"]
+
+[node name="Main" type="Node3D"]
+
+[node name="InitialPlatform" parent="." instance=ExtResource("1_0wfyh")]
+
+[node name="LightGroup" type="Node" parent="."]
+
+[node name="DirectionalLight" type="DirectionalLight3D" parent="LightGroup"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.26524, 7.28088, 0)
+visible = false
+light_energy = 0.515
+light_angular_distance = 1.0
+sky_mode = 1
+
+[node name="SpotLight" type="SpotLight3D" parent="LightGroup"]
+transform = Transform3D(1, 0, 0, 0, 0.422397, 0.906411, 0, -0.906411, 0.422397, 2.49367, 6.24357, 2.68697)
+layers = 31
+light_energy = 4.131
+light_indirect_energy = 18.94
+light_size = 1.0
+light_specular = 5.187
+shadow_enabled = true
+shadow_bias = 0.48
+spot_range = 9.72837
+
+[node name="OmniLight3D3" type="OmniLight3D" parent="LightGroup"]
+transform = Transform3D(0.999995, 0.00301494, -0.000817713, -0.00301339, 0.999994, 0.0018847, 0.000823409, -0.00188222, 0.999998, 35.3816, 5.81518, 11.2096)
+light_size = 1.0
+omni_range = 14.2625
+
+[node name="Character" parent="." instance=ExtResource("2_0wfyh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.41088, 1.75403, 6.46076)
+
+[node name="StaticBody3D2" parent="." instance=ExtResource("1_0wfyh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.5613, -0.00427246, 7.85851)
+
+[node name="StaticBody3D" parent="." instance=ExtResource("1_0wfyh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.0541, 0, 12.972)
+
+[node name="Pillar" parent="." instance=ExtResource("3_sugp2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.506453, 0)
+
+[node name="Pillar2" parent="." instance=ExtResource("3_sugp2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.1927, 0.609385, 10.1222)
+
+[node name="StaticBody3D3" parent="." instance=ExtResource("1_0wfyh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.113, 9.33558, 5.35859)

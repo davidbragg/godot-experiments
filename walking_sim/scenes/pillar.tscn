@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://daaj7dkcgs36n"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rqueh"]
+height = 3.26647
+
+[node name="Pillar" type="StaticBody3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1.13485, -6.14709e-11, -3.84377e-14, 6.14709e-11, 1.13485, 0.00140629, -3.84377e-14, -0.00140629, 1.13485, 0.242886, 1.30198, 0.958467)
+shape = SubResource("CapsuleShape3D_rqueh")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="."]
+transform = Transform3D(1, -5.41664e-11, -3.38702e-14, 5.41664e-11, 0.999999, 0.00123918, -3.38702e-14, -0.00123918, 0.999999, 0.242886, 1.30198, 0.958467)
+size = Vector3(1, 3.8457, 1)
