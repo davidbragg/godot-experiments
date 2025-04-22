@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://ley7xvowehkb"]
+
+[ext_resource type="Script" uid="uid://30b47ohgyu0b" path="res://Tile.cs" id="1_n3f48"]
+[ext_resource type="Texture2D" uid="uid://coclnlc5pdeyf" path="res://assets/plain_tile.png" id="2_vx4y2"]
+[ext_resource type="Texture2D" uid="uid://cq0i0vtw8tk3v" path="res://assets/face.png" id="3_a2t34"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 394.0
+offset_bottom = 590.0
+pivot_offset = Vector2(197, 295)
+script = ExtResource("1_n3f48")
+metadata/_edit_use_anchors_ = true
+
+[node name="Tile" type="Sprite2D" parent="."]
+position = Vector2(197, 295)
+texture = ExtResource("2_vx4y2")
+
+[node name="Face" type="Sprite2D" parent="."]
+position = Vector2(197, 295)
+texture = ExtResource("3_a2t34")
+
+[connection signal="gui_input" from="." to="." method="GuiInput"]

@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3 uid="uid://cb1yj73l0nimj"]
+
+[ext_resource type="PackedScene" uid="uid://ley7xvowehkb" path="res://tile.tscn" id="2_0xm2m"]
+
+[node name="Main" type="Node2D"]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(720, 1280)
+offset_left = -254.0
+offset_top = -201.0
+offset_right = 466.0
+offset_bottom = 1079.0
+scale = Vector2(1.68589, 1.41306)
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0.637843, 0.637843, 0.637843, 1)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(361, 642)
+
+[node name="Control" parent="." instance=ExtResource("2_0xm2m")]
+offset_left = 166.0
+offset_top = 338.0
+offset_right = 560.0
+offset_bottom = 928.0

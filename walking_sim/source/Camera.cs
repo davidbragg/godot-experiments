@@ -11,10 +11,12 @@ public partial class Camera : CharacterBody3D
 	[Export]
 	public float RotMult { get; set; } = 2.0f;
 	[Export]
+	// a Marker3D in the level to use as the default spawn point for the player
 	public Marker3D SpawnPoint;
 
 	private Variant _gravity = ProjectSettings.GetSetting("physics/3d/default_gravity");
 
+	// adding these nodes in to avoid having to keep calling them by path
 	private Node3D _pov;
 	private SpotLight3D _flashlight;
 	private Timer _coyoteTimer;
@@ -28,6 +30,7 @@ public partial class Camera : CharacterBody3D
 		_pov = GetNode<Node3D>("POV");
 		_flashlight = GetNode<SpotLight3D>("POV/Flashlight");
 		_coyoteTimer = GetNode<Timer>("CoyoteTimer");
+		// set play location/orientation to spawn point
 		GlobalPosition = SpawnPoint.GlobalPosition;
 		GlobalBasis = SpawnPoint.GlobalBasis;
 		FloorBlockOnWall = false;
@@ -40,7 +43,6 @@ public partial class Camera : CharacterBody3D
 	{
 		GetInput(delta);
 		MoveAndSlide();
-		// DebugOutput();
 	}
 
 	private void GetInput(double delta)
@@ -63,8 +65,11 @@ public partial class Camera : CharacterBody3D
 		RotateY(RotMult * turn * (float)delta);
 		Velocity += -Transform.Basis.Z * input.Y * MoveSpeed * (float)delta;
 		Velocity += -Transform.Basis.X * input.X * MoveSpeed * (float)delta;
+
+		// if the player is not on the floor
 		if (!IsOnFloor())
 		{
+			// add falling to the player's velocity and set player state
 			Velocity += new Vector3(0, -(float)_gravity * (float)delta, 0);
 			if (_player == _playerState.Walk || _player == _playerState.Unknown)
 			{
@@ -74,12 +79,14 @@ public partial class Camera : CharacterBody3D
 		}
 		else
 		{
+			// ensure the player state is Walk
 			if (_player != _playerState.Walk)
 			{
 				SetPlayerState(_playerState.Walk);
 			}
 		}
 
+		// check if the player is allowed to jump
 		if ((IsOnFloor() || !_coyoteTimer.IsStopped()) && Input.IsActionJustPressed("jump"))
 		{
 			Velocity += new Vector3(0, JumpSpeed * (float)delta, 0);
@@ -91,6 +98,7 @@ public partial class Camera : CharacterBody3D
 			_flashlight.Visible = !_flashlight.Visible;
 		}
 
+		// respawn the player if their Y velocity passed -30
 		if (Velocity.Y < -30)
 		{
 			Velocity = Vector3.Zero;
@@ -99,6 +107,7 @@ public partial class Camera : CharacterBody3D
 		}
 	}
 
+	// helper method to set to the player state
 	private void SetPlayerState(_playerState newState)
 	{
 		if (newState == _player)
@@ -106,9 +115,5 @@ public partial class Camera : CharacterBody3D
 			return;
 		}
 		_player = newState;
-	}
-
-	private void DebugOutput()
-	{
 	}
 }
